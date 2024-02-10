@@ -1,0 +1,413 @@
+options:
+    KeyItem: ink sac
+
+    # Time is the wait time of 5 seconds before giving the reward to the player.
+    Time: false
+
+    # Is the 5min, 20min, 1h, 2h and 4h loop for all the keys and gives the player's the keys every amount of time.
+    GiveLoop: false
+
+on load:
+    set {doDoIt} to {@GiveLoop}
+    set {time} to {@Time}
+
+command /setsomething <text>:
+    trigger:
+        if player is operator:
+            if arg 1 is "aluminum":
+                set {aluminum} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "malachite":
+                set {malachite} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "mithril":
+                set {mithril} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "magnetite":
+                set {magnetite} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "infernite":
+                set {infernite} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "magnetitebow":
+                set {magnetiteBow} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "plotkey":
+                set {plotKey} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "potionswiftness":
+                set {potionSwiftness} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "arrowharming":
+                set {arrowHarming} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "potionstrength":
+                set {potionStrength} to player's tool
+                send "&aSetted!" to player
+            else if arg 1 is "potionregeneration":
+                set {potionRegeneration} to player's tool
+                send "&aSetted!" to player
+
+command /setkey <text>:
+    trigger:
+        if player is operator:
+            if arg 1 is "common":
+                set {KeyItem::common} to player's tool
+            else if arg 1 is "rare":
+                set {KeyItem::rare} to player's tool
+            else if arg 1 is "epic":
+                set {KeyItem::epic} to player's tool
+            else if arg 1 is "legendary":
+                set {KeyItem::legendary} to player's tool
+            else if arg 1 is "heroic":
+                set {KeyItem::heroic} to player's tool
+
+every 5 minutes:
+    if {doDoIt} is true:
+        loop all players:
+            give loop-player 1 of {KeyItem::common}
+            send "&aYou just received a common crate key!" to loop-player
+
+every 20 minutes:
+    if {doDoIt} is true:
+        loop all players:
+            give loop-player 1 of {KeyItem::rare}
+            send "&aYou just received a rare crate key!" to loop-player
+
+every 1 hour:
+    if {doDoIt} is true:
+        loop all players:
+            give loop-player 1 of {KeyItem::epic}
+            send "&aYou just received a epic crate key!" to loop-player
+
+every 2 hour:
+    if {doDoIt} is true:
+        loop all players:
+            give loop-player 1 of {KeyItem::legendary}
+            send "&aYou just received a legendary crate key!" to loop-player
+
+every 4 hour:
+    if {doDoIt} is true:
+        loop all players:
+            give loop-player 1 of {KeyItem::heroic}
+            send "&aYou just received a heroic crate key!" to loop-player
+
+command /givekey <text>:
+    trigger:
+        if player is operator:
+            if arg 1 is "common":
+                give player 1 of {KeyItem::common}
+                send "&aYou just received a common crate key!" to player
+            else if arg 1 is "rare":
+                give player 1 of {KeyItem::rare}
+                send "&aYou just received a rare crate key!" to player
+            else if arg 1 is "epic":
+                give player 1 of {KeyItem::epic}
+                send "&aYou just received a epic crate key!" to player
+            else if arg 1 is "legendary":
+                give player 1 of {KeyItem::legendary}
+                send "&aYou just received a legendary crate key!" to player
+            else if arg 1 is "heroic":
+                give player 1 of {KeyItem::heroic}
+                send "&aYou just received a heroic crate key!" to player
+
+command /setcratemore <text>:
+    trigger:
+        if player is operator:
+            if arg 1 is "crystite":
+                set {CrystitePickaxe} to player's tool
+
+on click on light gray stained glass:
+    if player is sneaking:
+        if player is operator:
+            set {CommonCrate::Location} to location of event-block
+            send "&aSet this to the common crate location." to player
+        else:
+            cancel event
+    else:
+        if location of event-block is {CommonCrate::Location}:
+            if player has 1 of {KeyItem::common}:
+                remove 1 of {KeyItem::common} from player's inventory
+                if {Doing::%player's uuid%} isn't set:
+                    set {Doing::%player's uuid%} to true
+                    if {time} is true:
+                        send "&5Spinning the wheel!" to player
+                        send "&55" to player
+                        wait 1 second
+                        send "&54" to player
+                        wait 1 second
+                        send "&53" to player
+                        wait 1 second
+                        send "&52" to player
+                        wait 1 second
+                        send "&51" to player
+                        wait 1 second
+                    set {_randomNumber} to random integer between 1 and 100
+                    if {_randomNumber} <= 10:
+                        give player 1 of enchanting table
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got an enchanting table!" to player
+                    else if {_randomNumber} <= 45:
+                        give player 16 of {malachite}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 16 malachite!" to player
+                    else if {_randomNumber} <= 75:
+                        give player 32 of {aluminum}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 32 aluminum!" to player
+                    else if {_randomNumber} <= 90:
+                        give player 8 of steak
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 8 steak!" to player
+                    else:
+                        give player 18 of arrows
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a stack of arrows!" to player
+                else:
+                    send "&cYou can only open one crate at the time." to player
+            else:
+                send "&cYou need a common crate key to open this!" to player
+
+on click on lime stained glass:
+    if player is sneaking:
+        if player is operator:
+            set {RareCrate::Location} to location of event-block
+            send "&aSet this to the rare crate location." to player
+        else:
+            cancel event
+    else:
+        if location of event-block is {RareCrate::Location}:
+            if player has 1 of {KeyItem::rare}:
+                cancel event
+                remove 1 of {KeyItem::rare} from player's inventory
+                if {Doing::%player's uuid%} isn't set:
+                    set {Doing::%player's uuid%} to true
+                    if {time} is true:
+                        send "&5Spinning the wheel!" to player
+                        send "&55" to player
+                        wait 1 second
+                        send "&54" to player
+                        wait 1 second
+                        send "&53" to player
+                        wait 1 second
+                        send "&52" to player
+                        wait 1 second
+                        send "&51" to player
+                        wait 1 second
+                    set {_randomNumber} to random integer between 1 and 100
+                    if {_randomNumber} <= 8:
+                        give player 1 of {magnetiteBow}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got an magnetite bow!" to player
+                    else if {_randomNumber} <= 35:
+                        give player 16 of {malachite}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 16 malachite!" to player
+                    else if {_randomNumber} <= 65:
+                        give player 1 of anvil
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got an anvil!" to player
+                    else if {_randomNumber} <= 85:
+                        give player 1 of lava bucket
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a lava bucket!" to player
+                    else if {_randomNumber} <= 95:
+                        give player 1 of golden apple
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a golden apple!" to player
+                    else:
+                        give player 16 of {mithril}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 16 of mithril!" to player
+
+                else:
+                    send "&cYou can only open one crate at the time." to player
+            else:
+                send "&cYou need a rare crate key to open this!" to player
+
+on click on light blue stained glass:
+    if player is sneaking:
+        if player is operator:
+            set {EpicCrate::Location} to location of event-block
+            send "&aSet this to the epic crate location." to player
+        else:
+            cancel event
+    else:
+        if location of event-block is {EpicCrate::Location}:
+            if player has 1 of {KeyItem::epic}:
+                cancel event
+                remove 1 of {KeyItem::epic} from player's inventory
+                if {Doing::%player's uuid%} isn't set:
+                    set {Doing::%player's uuid%} to true
+                    if {time} is true:
+                        send "&5Spinning the wheel!" to player
+                        send "&55" to player
+                        wait 1 second
+                        send "&54" to player
+                        wait 1 second
+                        send "&53" to player
+                        wait 1 second
+                        send "&52" to player
+                        wait 1 second
+                        send "&51" to player
+                        wait 1 second
+                    set {_randomNumber} to random integer between 1 and 100
+                    if {_randomNumber} <= 5:
+                        give player 12 of {infernite}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 12 of infernite!" to player
+                    else if {_randomNumber} <= 25:
+                        give player 16 of {mithril}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 16 mithril!" to player
+                    else if {_randomNumber} <= 45:
+                        give player 2 of golden apple
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 2 golden apples!" to player
+                    else if {_randomNumber} <= 65:
+                        give player 64 of steak
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 64 steak!" to player
+                    else if {_randomNumber} <= 80:
+                        give player 16 of tnt
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 16 TNT!" to player
+                    else if {_randomNumber} <= 90:
+                        give player 64 of {magnetite}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a stack of magnetite!" to player
+                    else:
+                        give player 1 of trident
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a trident!" to player
+                else:
+                    send "&cYou can only open one crate at the time." to player
+            else:
+                send "&cYou need a rare crate key to open this!" to player
+
+on click on purple stained glass:
+    if player is sneaking:
+        if player is operator:
+            set {LegendaryCrate::Location} to location of event-block
+            send "&aSet this to the legendary crate location." to player
+        else:
+            cancel event
+    else:
+        if location of event-block is {LegendaryCrate::Location}:
+            if player has 1 of {KeyItem::legendary}:
+                cancel event
+                remove 1 of {KeyItem::legendary} from player's inventory
+                if {Doing::%player's uuid%} isn't set:
+                    set {Doing::%player's uuid%} to true
+                    if {time} is true:
+                        send "&5Spinning the wheel!" to player
+                        send "&55" to player
+                        wait 1 second
+                        send "&54" to player
+                        wait 1 second
+                        send "&53" to player
+                        wait 1 second
+                        send "&52" to player
+                        wait 1 second
+                        send "&51" to player
+                        wait 1 second
+                    set {_randomNumber} to random integer between 1 and 100
+                    if {_randomNumber} <= 5:
+                        give player 1 of ender pearl
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got an ender pearl!" to player
+                    else if {_randomNumber} <= 25:
+                        give player 1 of crossbow
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 16 mithril!" to player
+                    else if {_randomNumber} <= 45:
+                        give player 16 of {arrowHarming}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a stack of arrows instant damage!" to player
+                    else if {_randomNumber} <= 65:
+                        give player 32 of {mithril}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 32 mithril!" to player
+                    else if {_randomNumber} <= 80:
+                        give player 1 of {potionSwiftness}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a potion of swiftness!" to player
+                    else if {_randomNumber} <= 90:
+                        give player 1 of elytra
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got an elytra!" to player
+                    else:
+                        give player 12 of {infernite}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 12 of infernite!" to player
+                else:
+                    send "&cYou can only open one crate at the time." to player
+            else:
+                send "&cYou need a legendary crate key to open this!" to player
+
+on click on yellow stained glass:
+    if player is sneaking:
+        if player is operator:
+            set {HeroicCrate::Location} to location of event-block
+            send "&aSet this to the heroic crate location." to player
+        else:
+            cancel event
+    else:
+        if location of event-block is {HeroicCrate::Location}:
+            if player has 1 of {KeyItem::heroic}:
+                cancel event
+                remove 1 of {KeyItem::heroic} from player's inventory
+                if {Doing::%player's uuid%} isn't set:
+                    set {Doing::%player's uuid%} to true
+                    if {time} is true:
+                        send "&5Spinning the wheel!" to player
+                        send "&55" to player
+                        wait 1 second
+                        send "&54" to player
+                        wait 1 second
+                        send "&53" to player
+                        wait 1 second
+                        send "&52" to player
+                        wait 1 second
+                        send "&51" to player
+                        wait 1 second
+                    set {_randomNumber} to random integer between 1 and 100
+                    if {_randomNumber} <= 4:
+                        give player 1 of {plotKey}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a plot key!" to player
+                    else if {_randomNumber} <= 20:
+                        give player 20 of {infernite}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 20 of infernite!" to player
+                    else if {_randomNumber} <= 35:
+                        give player 1 of enchanted golden apple
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got an enchanted golden apple!" to player
+                    else if {_randomNumber} <= 50:
+                        give player 1 of {potionStrength}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a potion of strength!" to player
+                    else if {_randomNumber} <= 65:
+                        give player 1 of {potionRegeneration}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a potion of regeneration!" to player
+                    else if {_randomNumber} <= 80:
+                        give player 48 of {arrowHarming}
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got 48 arrows of harming instant damage!" to player
+                    else if {_randomNumber} <= 90:
+                        give player 1 of elytra
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got an elytra!" to player
+                    else:
+                        give player 1 of shulker box
+                        delete {Doing::%player's uuid%}
+                        send "&aYou got a shulker box!" to player
+                else:
+                    send "&cYou can only open one crate at the time." to player
+            else:
+                send "&cYou need a heroic crate key to open this!" to player
+
+on tab complete of "/givekey":
+    set tab completions for position 1 to "common", "rare", "epic", "legendary" and "heroic"
